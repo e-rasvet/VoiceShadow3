@@ -5,11 +5,11 @@
 --------
 ABOUT
 --------
-This is version 2.4.x of the "voiceshadow" module (voiceshadow).
+This is version 3.x of the "voiceshadow" module (voiceshadow).
 It is still IN DEVELOPMENT and
 should not be considered a stable release unless otherwise noted. 
 
-2.4.x release is compatible only with Moodle 2.0.
+3.x release is compatible only with Moodle 3.0.
 
 The "voiceshadow" module is developed by
     Igor Nikulin, Paul Daniels and Nobuhiro Kumai.
