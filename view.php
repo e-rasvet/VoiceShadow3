@@ -118,6 +118,8 @@ if ($a == 'add' && $act == 'newinstance') {
                 $DB->insert_record("voiceshadow_process", $add);
             } else if (mimeinfo('type', $file->filename) == 'audio/mp3') {
                 $data->itemid = $file->id;
+            } else if (mimeinfo('type', $file->filename) == 'audio/aac') {
+                $data->itemid = $file->id;
             } else {
                 echo "Incorrect Audio format " . mimeinfo('type', $file->filename);
                 die();
@@ -462,6 +464,7 @@ if ($a == "add") {
         {
             global $CFG, $USER, $DB, $course, $fileid, $id, $act, $commentid, $voiceshadow;
 
+            $audioVars = array();
             $time = time();
             $filename = str_replace(" ", "_", $USER->username) . "_" . date("Ymd_Hi", $time);
 
@@ -483,12 +486,12 @@ if ($a == "add") {
             //------------------------------------------//
 
             //--------------Uploadd MP3 ----------------//
-            if (!voiceshadow_is_ios()) {
+            //if (!voiceshadow_is_ios()) {
                 $filepickeroptions = array();
                 $filepickeroptions['maxbytes'] = get_max_upload_file_size($voiceshadow->maxbytes);
                 $mform->addElement('header', 'mp3upload', get_string('mp3upload', 'voiceshadow'));
                 $mform->addElement('filepicker', 'submitfile', get_string('uploadmp3', 'voiceshadow'), null, $filepickeroptions);
-            }
+            //}
 
             //-------------- Listen to recorded audio ----------------//
             $mform->addElement('header', 'listentorecordedaudio', get_string('listentorecordedaudio', 'voiceshadow'));
@@ -500,6 +503,8 @@ if ($a == "add") {
                     if ($item = $DB->get_record("files", array("id" => $voiceshadow->{$name}))) {
 
                         $link = new moodle_url("/mod/voiceshadow/file.php?file=" . $voiceshadow->{$name});
+
+                        $audioVars[$i] = $voiceshadow->{$name};
 
                         if (!isset($linkhtml5mp3))
                             $linkhtml5mp3 = $link;
@@ -598,14 +603,42 @@ if ($a == "add") {
 
             if ($recorderType == "ios") { // || voiceshadow_get_browser() == 'android'
                 $mediadata .= html_writer::start_tag("h3", array("style" => "padding: 0 20px;"));
-                $mediadata .= html_writer::start_tag("a", array("href" => 'voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&time=' . $time . '&var=1&type=voiceshadow', "id" => "id_recoring_link",
+                $mediadata .= html_writer::start_tag("a", array("href" => 'voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&time=' . $time . '&fid=' . $audioVars[1] . '&var=1&type=voiceshadow', "id" => "id_recoring_link",
                     "onclick" => 'formsubmit(this.href)'));
-                //voiceshadow://?link='.$CFG->wwwroot.'&id='.$id.'&cid='.$course->id.'&filename='.$filename.'&type=audio
+
                 $mediadata .= get_string('recordvoice', 'voiceshadow');
                 $mediadata .= html_writer::end_tag('a');
                 $mediadata .= html_writer::end_tag('h3');
 
-                $mediadata .= html_writer::script('function formsubmit(link) {$(\'input[name=iphonelink]\').val(link);$(\'#mform1\').submit();}');
+                $mediadata .= html_writer::start_tag("div", array("style" => "font-size: 21px;line-height: 40px;color: #333;"));
+                $mediadata .= "Recordings";
+                $mediadata .= html_writer::end_tag('div');
+                
+                //$mediadata .= '<div id="recordappfile_debug" controls></div>';
+
+                $mediadata .= html_writer::start_tag("ul", array("id"=>"recordingslist", "style" => "display:none; list-style-type: none;"));
+                $mediadata .= '<li><audio id="recordappfile_aac" controls></audio></li>';
+                $mediadata .= html_writer::end_tag('ul');
+
+                $mediadata .= html_writer::script('
+setInterval(function(){
+    $.get( "ajax-apprecord.php", { id: '.$id.', uid: '.$USER->id.' }, function(json){
+        var j = JSON.parse(json);
+        var t = +new Date();
+        
+        //$(\'#recordappfile_debug\').html(t+": "+json);
+
+        if (j.status == "success") {
+            $(\'#recordappfile_aac\').html("adding...");
+            $(\'#recordingslist\').show();
+            $(\'#recordappfile_aac\').append(\'<source src="' . $CFG->wwwroot . '/mod/voiceshadow/file.php?file=\'+j.fileid+\'" type="audio/aac" />\');
+            $("#id_submitfile").val(j.itemid);
+            
+            $.get( "ajax-apprecord.php", { a: "delete", id: '.$id.', uid: '.$USER->id.' });
+        }
+    } );
+}, 1000);
+                ');
             } else if ($recorderType == "html5") {
                 $mediadata .= '
 
@@ -788,6 +821,7 @@ if ($a == "add") {
 
                 echo html_writer::script('
 function chooserecord(e){
+console.log("1");
   $(".choosingrecord").html(\'<img src="' . (new moodle_url("/mod/voiceshadow/img/right-arrow-gray.png")) . '" style="margin-top: 6px;"/>\');
   $(e).html(\'<img src="' . (new moodle_url("/mod/voiceshadow/img/right-arrow.png")) . '" style="margin-top: 6px;"/>\');
   $("#id_submitfile").val($(e).attr("data-url"));
@@ -809,7 +843,9 @@ function callbackjs(e){
   $("#id_speechtext").val(""+stext+"");
   $(".choosingrecord").html(\'<img src="' . (new moodle_url("/mod/voiceshadow/img/right-arrow-gray.png")) . '" style="margin-top: 6px;"/>\');
   obj = JSON.parse(e.data);
-  
+
+  console.log("2");
+
   $("#mp3_flash_records").prepend(\'<div class="recordings"><div class="choosingrecord" style="float:left;cursor: pointer;" data-url="\'+obj.id+\'" data-text="\'+stext+\'" onclick="chooserecord(this)"><img src="' . (new moodle_url("/mod/voiceshadow/img/right-arrow.png")) . '" style="margin-top: 6px;"/></div><div style="float:left;"><div>' . $preplayer . '</div><div style="margin-bottom: 10px;width: 275px;padding: 10px;border: 1px dashed #666;background-color: #eeefff;">\'+stext+\'</div></div><div style="clear:both;"></div></div>\');
   $("#id_submitfile").val(obj.id);
 
@@ -844,7 +880,7 @@ function callbackjs(e){
                             $checked = '';
 
                         $o = '<div style="margin:10px 0">
-                      <input type="radio" name="selectaudiomodel" value="' . $i . '" class="selectaudiomodel" id="id_selectaudiomodel_' . $i . '" style="float: left;margin: 0 20px 0 0;" ' . $checked . ' data-url="voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&time=' . $time . '&var=' . $i . '&type=voiceshadow" />
+                      <input type="radio" name="selectaudiomodel" value="' . $i . '" class="selectaudiomodel" id="id_selectaudiomodel_' . $i . '" style="float: left;margin: 0 20px 0 0;" ' . $checked . ' data-url="voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&fid=' . $audioVars[$i] . '&time=' . $time . '&var=' . $i . '&type=voiceshadow" />
                       ';
 
                         if (voiceshadow_is_ios() || voiceshadow_get_browser() == 'chrome' || voiceshadow_get_browser() == 'android') {

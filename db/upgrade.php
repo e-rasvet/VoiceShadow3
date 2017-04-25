@@ -89,6 +89,32 @@ function xmldb_voiceshadow_upgrade($oldversion=0) {
         upgrade_mod_savepoint(true, 2014080400, 'voiceshadow');
     }
 
+    if ($oldversion < 2017030300) {
+        // Define table assign_user_mapping to be created.
+        $table = new xmldb_table('voiceshadow_appfiles');
+
+        // Adding fields to table assign_user_mapping.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('instance', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('fileid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('sourcefileid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('var', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '255', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('time', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+
+        // Adding keys to table assign_user_mapping.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('user', XMLDB_KEY_FOREIGN, array('userid'), 'user', array('id'));
+
+        // Conditionally launch create table for assign_user_mapping.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Assign savepoint reached.
+        upgrade_mod_savepoint(true, 2017030300, 'voiceshadow');
+    }
+
     return $result;
 }
 

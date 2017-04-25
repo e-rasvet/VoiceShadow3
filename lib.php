@@ -1,7 +1,7 @@
 <?php // $Id: lib.php,v 1.2 2012/03/10 22:00:01 Igor Nikulin Exp $
 
 define('VOICESHADOW_VIDEOTYPES', json_encode(array("video/quicktime", "video/mp4")));
-define('VOICESHADOW_AUDIOTYPES', json_encode(array("audio/x-wav", "audio/mpeg", "audio/wav", "audio/mp4a", "audio/mp4", "audio/mp3")));
+define('VOICESHADOW_AUDIOTYPES', json_encode(array("audio/x-wav", "audio/mpeg", "audio/wav", "audio/mp4a", "audio/mp4", "audio/mp3", "audio/aac")));
 
 
 //Loading phonetic table
