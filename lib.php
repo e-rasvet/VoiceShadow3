@@ -763,7 +763,9 @@ function voiceshadow_player($ids, $table = "voiceshadow_files")
 
                 $link = new moodle_url("/pluginfile.php/" . $item->contextid . "/mod_voiceshadow/" . $ids . "/" . $data->itemid . "/" . $item->filename);
 
-                if (voiceshadow_is_ios() || voiceshadow_get_browser() == 'chrome' || voiceshadow_get_browser() == 'android') {
+                //echo voiceshadow_get_browser()."!!!";
+
+                if (voiceshadow_is_ios() || voiceshadow_get_browser() == 'chrome' || voiceshadow_get_browser() == 'android' || voiceshadow_get_browser() == 'msie'  || voiceshadow_get_browser() == 'safari' || voiceshadow_get_browser() == 'firefox' || voiceshadow_get_browser() == 'Edge') {
                     if (in_array($item->mimetype, json_decode(VOICESHADOW_AUDIOTYPES))) {
                         $o = "";
                         $o .= html_writer::start_tag('div', array("id" => "html5-player-" . $ids));
@@ -1182,7 +1184,7 @@ define('voiceshadow_COUNT_LETTERS', 2);
  * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class voiceshadow_base
+class __construct
 {
 
     const FILTER_ALL = 0;
@@ -4564,19 +4566,9 @@ function voiceshadow_view_dates()
 
 function voiceshadow_get_browser()
 {
-    if (strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== FALSE)
-        return 'android';
-    elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== FALSE)
-        return 'msie';
-    elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox') !== FALSE)
-        return 'firefox';
-    elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== FALSE)
-        return 'chrome';
-    elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== FALSE || strpos($_SERVER['HTTP_USER_AGENT'], 'iPad') !== FALSE)
-        return 'mobileios';
-    elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Safari') !== FALSE)
-        return 'safari';
-    else
-        return 'other';
+    include_once ("Browser.php");
+    $browser = new BrowserUn();
+
+    return $browser->getBrowser();
 }
 

@@ -308,3 +308,14 @@ $string['html5']      = 'HTML 5';
 $string['flash']      = 'Flash';
 $string['recordertype']      = 'Recorder';
 $string['autoswitch']      = 'Auto Switch';
+
+$string['voiceshadow:addinstance']      = 'voiceshadow:addinstance';
+$string['voiceshadow:bulkupload']      = 'voiceshadow:bulkupload';
+$string['voiceshadow:debugger']      = 'voiceshadow:debugger';
+$string['voiceshadow:gradepeer']      = 'voiceshadow:gradepeer';
+$string['voiceshadow:student']      = 'voiceshadow:student';
+$string['voiceshadow:teacher']      = 'voiceshadow:teacher';
+$string['voiceshadow:submit']      = 'voiceshadow:submit';
+$string['voiceshadow:view']      = 'voiceshadow:view';
+$string['voiceshadow:grade']      = 'voiceshadow:grade';
+$string['voiceshadow:exportownsubmission']      = 'voiceshadow:exportownsubmission';
