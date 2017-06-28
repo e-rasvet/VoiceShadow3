@@ -1184,7 +1184,7 @@ define('voiceshadow_COUNT_LETTERS', 2);
  * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class __construct
+class voiceshadow_base
 {
 
     const FILTER_ALL = 0;
@@ -1237,7 +1237,7 @@ class __construct
      * @param object $cm usually null, but if we have it we pass it to save db access
      * @param object $course usually null, but if we have it we pass it to save db access
      */
-    function voiceshadow_base($cmid = 'staticonly', $voiceshadow = NULL, $cm = NULL, $course = NULL)
+    public function __construct($cmid = 'staticonly', $voiceshadow = NULL, $cm = NULL, $course = NULL)
     {
         global $COURSE, $DB;
 
@@ -1286,6 +1286,10 @@ class __construct
 
         /// Set up things for a HTML editor if it's needed
         $this->defaultformat = editors_get_preferred_format();
+    }
+
+    public function voiceshadow_base($cmid = 'staticonly', $voiceshadow = NULL, $cm = NULL, $course = NULL) {
+        self::__construct($cmid = 'staticonly', $voiceshadow = NULL, $cm = NULL, $course = NULL);
     }
 
     /**
