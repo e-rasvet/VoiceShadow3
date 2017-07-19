@@ -16,12 +16,13 @@ echo "DONE";
 die();
 */
 
-file_put_contents('/var/www/html/moodle3/mod/voiceshadow/debug.txt', json_encode($_POST), FILE_APPEND);
+//file_put_contents('/var/www/html/moodle3/mod/voiceshadow/debug.txt', json_encode($_POST), FILE_APPEND);
 
 $id = optional_param('id', NULL, PARAM_INT);
 $fid = optional_param('fid', NULL, PARAM_INT);
 $uid = optional_param('uid', NULL, PARAM_INT);
 $var = optional_param('var', NULL, PARAM_INT);
+$sstText = optional_param('sstText', NULL, PARAM_TEXT);
 
 $filename = "record_aac_" . date("Ymd") . "_" . rand(999, 99999);
 
@@ -79,11 +80,13 @@ $add->var = $var;
 $add->userid = $uid;
 $add->time = time();
 
+if (!empty($sstText)) {
+    $add->text = str_replace('"', "'", $sstText);
+}
+
 $DB->insert_record("voiceshadow_appfiles", $add);
 
 
-$item = $DB->get_record("files", array("id" => $itemid->get_id(), "ids" => $nfid));
+$item = $DB->get_record("files", array("id" => $itemid->get_id()));
 
 echo json_encode(array("id" => $item->id));
-
-

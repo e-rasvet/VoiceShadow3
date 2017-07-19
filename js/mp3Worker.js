@@ -10,6 +10,11 @@ self.onmessage = function(e) {
 		}
 		mp3codec = Lame.init();
 
+        e.data.config.channels = 1;
+        e.data.config.samplerate = 48000;
+        e.data.config.bitrate = 32;
+
+
 		Lame.set_mode(mp3codec, e.data.config.mode || Lame.JOINT_STEREO);
 		Lame.set_num_channels(mp3codec, e.data.config.channels || 2);
 		Lame.set_num_samples(mp3codec, e.data.config.samples || -1);

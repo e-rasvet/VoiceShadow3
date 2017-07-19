@@ -115,6 +115,17 @@ function xmldb_voiceshadow_upgrade($oldversion=0) {
         upgrade_mod_savepoint(true, 2017030300, 'voiceshadow');
     }
 
+    if ($oldversion < 2017063000) {
+        // Define table assign_user_mapping to be created.
+        $table = new xmldb_table('voiceshadow_appfiles');
+        $field = new xmldb_field('text', XMLDB_TYPE_TEXT, 'small', null, null, null, null, 'userid');
+        // Launch change of type for field grade.
+        $dbman->add_field($table, $field);
+
+        // Assign savepoint reached.
+        upgrade_mod_savepoint(true, 2017063000, 'voiceshadow');
+    }
+
     return $result;
 }
 

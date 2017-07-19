@@ -603,7 +603,7 @@ if ($a == "add") {
 
             if ($recorderType == "ios") { // || voiceshadow_get_browser() == 'android'
                 $mediadata .= html_writer::start_tag("h3", array("style" => "padding: 0 20px;"));
-                $mediadata .= html_writer::start_tag("a", array("href" => 'voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&time=' . $time . '&fid=' . $audioVars[1] . '&var=1&type=voiceshadow', "id" => "id_recoring_link",
+                $mediadata .= html_writer::start_tag("a", array("href" => 'voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&time=' . $time . '&fid=' . $audioVars[1] . '&var=1&type=voiceshadow&mod=voiceshadow', "id" => "id_recoring_link",
                     "onclick" => 'formsubmit(this.href)'));
 
                 $mediadata .= get_string('recordvoice', 'voiceshadow');
@@ -631,7 +631,7 @@ setInterval(function(){
         if (j.status == "success") {
             $(\'#recordappfile_aac\').html("adding...");
             $(\'#recordingslist\').show();
-            $(\'#recordappfile_aac\').append(\'<source src="' . $CFG->wwwroot . '/mod/voiceshadow/file.php?file=\'+j.fileid+\'" type="audio/aac" />\');
+            $(\'#recordappfile_aac\').append(\'<source src="' . $CFG->wwwroot . '/mod/voiceshadow/file.php?file=\'+j.fileid+\'" type="audio/aac" /> <input type="hidden" name="speechtext" value="\'+j.text+\'" />\');
             $("#id_submitfile").val(j.itemid);
             
             $.get( "ajax-apprecord.php", { a: "delete", id: '.$id.', uid: '.$USER->id.' });
@@ -644,6 +644,7 @@ setInterval(function(){
 
   <div style="font-size: 21px;line-height: 40px;color: #333;">Record</div>
 
+  <img src="img/spiffygif_30x30.gif" style="display:none;" id="html5-mp3-loader"/>
   <button onclick="startRecording(this);" id="btn_rec" disabled>record</button>
   <button onclick="stopRecording(this);" id="btn_stop" disabled>stop</button>
   
@@ -675,7 +676,10 @@ setInterval(function(){
     //input.connect(audio_context.destination);
     //__log(\'Input connected to audio context destination.\');
     
-    recorder = new Recorder(input);
+    recorder = new Recorder(input, {
+                  numChannels: 1,
+                  sampleRate: 48000,
+                });
     __log(\'Recorder initialised.\');
   }
 
@@ -795,7 +799,7 @@ setInterval(function(){
      jInit();
      loadAudio();
      
-     $("#id_Recording").find(".fitemtitle").append(\'<img src="img/spiffygif_30x30.gif" style="display:none;" id="html5-mp3-loader"/>\');
+     //$("#id_Recording").find(".fitemtitle").append(\'<img src="img/spiffygif_30x30.gif" style="display:none;" id="html5-mp3-loader"/>\');
   });
 </script>
   
@@ -880,7 +884,7 @@ function callbackjs(e){
                             $checked = '';
 
                         $o = '<div style="margin:10px 0">
-                      <input type="radio" name="selectaudiomodel" value="' . $i . '" class="selectaudiomodel" id="id_selectaudiomodel_' . $i . '" style="float: left;margin: 0 20px 0 0;" ' . $checked . ' data-url="voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&fid=' . $audioVars[$i] . '&time=' . $time . '&var=' . $i . '&type=voiceshadow" />
+                      <input type="radio" name="selectaudiomodel" value="' . $i . '" class="selectaudiomodel" id="id_selectaudiomodel_' . $i . '" style="float: left;margin: 0 20px 0 0;" ' . $checked . ' data-url="voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&fid=' . $audioVars[$i] . '&time=' . $time . '&var=' . $i . '&type=voiceshadow&mod=voiceshadow" />
                       ';
 
                         if (voiceshadow_is_ios() || voiceshadow_get_browser() == 'chrome' || voiceshadow_get_browser() == 'android') {
