@@ -603,8 +603,15 @@ if ($a == "add") {
 
             if ($recorderType == "ios") { // || voiceshadow_get_browser() == 'android'
                 $mediadata .= html_writer::start_tag("h3", array("style" => "padding: 0 20px;"));
-                $mediadata .= html_writer::start_tag("a", array("href" => 'voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&time=' . $time . '&fid=' . $audioVars[1] . '&var=1&type=voiceshadow&mod=voiceshadow', "id" => "id_recoring_link",
-                    "onclick" => 'formsubmit(this.href)'));
+
+                if ($voiceshadow->shadowingmode == 2) {
+                    $mediadata .= html_writer::start_tag("a", array("href" => 'voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&time=' . $time . '&fid=' . $audioVars[1] . '&var=1&audioBtn=0&mod=voiceshadow', "id" => "id_recoring_link",
+                        "onclick" => 'formsubmit(this.href)'));
+                } else {
+                    $mediadata .= html_writer::start_tag("a", array("href" => 'voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&time=' . $time . '&fid=' . $audioVars[1] . '&var=1&type=voiceshadow&mod=voiceshadow', "id" => "id_recoring_link",
+                        "onclick" => 'formsubmit(this.href)'));
+                }
+
 
                 $mediadata .= get_string('recordvoice', 'voiceshadow');
                 $mediadata .= html_writer::end_tag('a');
@@ -883,9 +890,15 @@ function callbackjs(e){
                         else
                             $checked = '';
 
-                        $o = '<div style="margin:10px 0">
+                        if ($voiceshadow->shadowingmode == 2) {
+                            $o = '<div style="margin:10px 0">
+                      <input type="radio" name="selectaudiomodel" value="' . $i . '" class="selectaudiomodel" id="id_selectaudiomodel_' . $i . '" style="float: left;margin: 0 20px 0 0;" ' . $checked . ' data-url="voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&fid=' . $audioVars[$i] . '&time=' . $time . '&var=' . $i . '&audioBtn=0&mod=voiceshadow" />
+                      ';
+                        } else {
+                            $o = '<div style="margin:10px 0">
                       <input type="radio" name="selectaudiomodel" value="' . $i . '" class="selectaudiomodel" id="id_selectaudiomodel_' . $i . '" style="float: left;margin: 0 20px 0 0;" ' . $checked . ' data-url="voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&fid=' . $audioVars[$i] . '&time=' . $time . '&var=' . $i . '&type=voiceshadow&mod=voiceshadow" />
                       ';
+                        }
 
                         if (voiceshadow_is_ios() || voiceshadow_get_browser() == 'chrome' || voiceshadow_get_browser() == 'android') {
                             $o .= '<div style="float:left;"><audio src="' . $link . '" id="audio_' . $voiceshadow->{$name} . '" controls="controls" class="startSST"><a href="' . $link . '">audio</a></audio></div><label for="id_selectaudiomodel_' . $i . '" style="float: left;margin-left: 20px;font-size: 15px;">' . $voiceshadow->{$nametext} . '</label><div style="clear:both;"></div>';

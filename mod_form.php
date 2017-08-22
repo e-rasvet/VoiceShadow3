@@ -72,7 +72,10 @@ class mod_voiceshadow_mod_form extends moodleform_mod {
         
         $filepickeroptions = array();
         $filepickeroptions['maxbytes']  = get_max_upload_file_size($CFG->maxbytes);
-        $mform->addElement('header', 'mp3upload', get_string('mp3upload', 'voiceshadow')); 
+        $mform->addElement('header', 'mp3upload', get_string('mp3upload', 'voiceshadow'));
+
+        $mform->addElement('select', 'shadowingmode', get_string('shadowingmode', 'voiceshadow'), Array('1'=>'Shadowing', '2'=>'Non-Shadowing'));
+        $mform->setDefault('shadowingmode', 1);
         
         $mform->addElement('select', 'countofrecords', get_string('tocreateaslideshow', 'voiceshadow'), Array('1'=>'1', '2'=>'2', '3'=>'3', '4'=>'4', '5'=>'5'), 'onchange="fpresetimages(this);return false;"');
         $mform->setDefault('countofrecords', 1);

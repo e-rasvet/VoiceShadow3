@@ -278,6 +278,7 @@ $string['default'] = 'Simple direct grading';
 $string['grademethod'] = 'Grading method';
 
 $string['tocreateaslideshow'] = 'Select the number of model sounds to upload';
+$string['shadowingmode'] = 'Shadowing or non-Shadowing Mode';
 $string['vartext'] = 'Audio name';
 $string['allowmultiple'] = 'Allow multiple recordings';
 
