@@ -4,7 +4,7 @@ insertAtCaret = function(areaId,text) {
         var txtarea = document.getElementById(areaId);
         var scrollPos = txtarea.scrollTop;
         var strPos = 0;
-        
+
         strPos = txtarea.selectionStart;
 
         var front = (txtarea.value).substring(0,strPos);
@@ -58,7 +58,7 @@ var interimResult = '';
 
 recognition.onresult = function (event) {
     //console.log(event);
-    
+
     var pos = $('#speechtext').getCursorPosition() - interimResult.length;
     $('#speechtext').val($('#speechtext').val().replace(interimResult, ''));
     interimResult = '';
@@ -72,10 +72,10 @@ recognition.onresult = function (event) {
           interimResult += event.results[i][0].transcript + '\u200B';
       }
     }
-    
+
     var textarea = document.getElementById('speechtext');
     textarea.scrollTop = textarea.scrollHeight;
-        
+
     window.recordmark = 1;
 };
 
@@ -92,8 +92,11 @@ recognition.onend = function() {
     $('#p-rec-notice').text("Click \"Start transcribing\" button when you are ready.");
     $('#p-rec-notice').removeClass("p-mic-active");
     window.recordmark = 0;
-    
+
     var id = 'transcript_'+$('.selectaudiomodel').val();
+
+    $("#id_speechtext").val("" + $("#speechtext").val() + "");
+
     //console.log($('.selectaudiomodel').val()+"/"+$("input[name='instanceid']").val()+"-selected");
     //console.log($('#'+id).text()+"/"+$("#speechtext").val());
     $.post( "ajax-score.php", { text1: $('#'+id).text(), text2: $("#speechtext").val() }, function( data ) {
@@ -104,7 +107,7 @@ recognition.onend = function() {
 
 $( document ).ready(function() {
     //var audioElement = document.createElement('audio');
-    
+
     $('#p-start-record').click(function() {
       if (window.recordmark == 0) {
         recognition.start();
@@ -115,26 +118,26 @@ $( document ).ready(function() {
         setTimeout('$("#speechtext").val(function(i, text) {return text + " "});', 1300);
       }
     });
-    
+
     $('#p-clear-text').click(function() {
       $('#speechtext').val("");
     });
-    
+
     $('#p-speech-text').click(function() {
       if ($('#speechtext').val().length > 100)
         window.open("http://tts-api.com/tts.mp3?q="+encodeURIComponent($('#speechtext').val()),'_new');
       else
         window.open("http://translate.google.com/translate_tts?ie=utf-8&tl=en&q="+encodeURIComponent($('#speechtext').val()),'_new');
-        
+
       //audioElement.setAttribute('src', "getmp3.php?t="+encodeURIComponent($('#speechtext').val()));
       //audioElement.load();
       //audioElement.play();
     });
-    
+
     $('.p-header').click(function() {
       $('.p-content').toggle();
     });
-    
+
     $('audio.startSST').on('playing', function() {
       if ($('.p-content').length > 0) {
         //$('#speechtext').val("");
@@ -145,7 +148,7 @@ $( document ).ready(function() {
         }
       }
     });
-    
+
     $('audio.startSST').on('ended', function() {
       if ($('.p-content').length > 0) {
         if (window.recordmark == 1) {
@@ -155,7 +158,7 @@ $( document ).ready(function() {
         }
       }
     });
-    
+
     $('audio.startSST').on('pause', function() {
       if ($('.p-content').length > 0) {
         if (window.recordmark == 1) {
@@ -167,6 +170,3 @@ $( document ).ready(function() {
     });
 
 });
-
-
-

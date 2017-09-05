@@ -60,7 +60,7 @@ if (!empty($delfilename)) {
 //if (voiceshadow_is_ios() && is_dir($CFG->dirroot.'/theme/mymobile')) {} else
 $PAGE->requires->js('/mod/voiceshadow/js/jquery.min.js', true);
 
-//$PAGE->requires->js_function_call('M.util.load_flowplayer'); 
+//$PAGE->requires->js_function_call('M.util.load_flowplayer');
 //$PAGE->requires->js('/mod/voiceshadow/js/ajax.js', true);
 
 $PAGE->requires->js('/mod/voiceshadow/js/flowplayer.min.js', true);
@@ -68,7 +68,7 @@ $PAGE->requires->js('/mod/voiceshadow/js/swfobject.js', true);
 $PAGE->requires->js('/mod/voiceshadow/js/recordmp3.js', true);
 
 if ($a == "add")
-    $PAGE->requires->js('/mod/voiceshadow/js/main_vs_pl.js?5' . time(), true);
+    $PAGE->requires->js('/mod/voiceshadow/js/main_vs_pl.js?6', true);
 
 $PAGE->requires->css('/mod/voiceshadow/css/main.css?1');
 
@@ -443,12 +443,12 @@ if ($a == "list") {
   $(".voiceshadow_rate_box").change(function() {
     var value = $(this).val();
     var data  = $(this).attr("data-url");
-    
+
     var e = $(this).parent();
     e.html(\'<img src="img/ajax-loader.gif" />\');
-    
+
     $.get("ajax.php", {id: ' . $id . ', act: "setrating", data: data, value: value}, function(data) {
-      e.html(data); 
+      e.html(data);
     });
   });
  });
@@ -608,7 +608,7 @@ if ($a == "add") {
                     $mediadata .= html_writer::start_tag("a", array("href" => 'voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&time=' . $time . '&fid=' . $audioVars[1] . '&var=1&audioBtn=0&mod=voiceshadow', "id" => "id_recoring_link",
                         "onclick" => 'formsubmit(this.href)'));
                 } else {
-                    $mediadata .= html_writer::start_tag("a", array("href" => 'voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&time=' . $time . '&fid=' . $audioVars[1] . '&var=1&type=voiceshadow&mod=voiceshadow', "id" => "id_recoring_link",
+                    $mediadata .= html_writer::start_tag("a", array("href" => 'voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&time=' . $time . '&fid=' . $audioVars[1] . '&var=1&audioBtn=1&type=voiceshadow&mod=voiceshadow', "id" => "id_recoring_link",
                         "onclick" => 'formsubmit(this.href)'));
                 }
 
@@ -620,7 +620,7 @@ if ($a == "add") {
                 $mediadata .= html_writer::start_tag("div", array("style" => "font-size: 21px;line-height: 40px;color: #333;"));
                 $mediadata .= "Recordings";
                 $mediadata .= html_writer::end_tag('div');
-                
+
                 //$mediadata .= '<div id="recordappfile_debug" controls></div>';
 
                 $mediadata .= html_writer::start_tag("ul", array("id"=>"recordingslist", "style" => "display:none; list-style-type: none;"));
@@ -632,7 +632,7 @@ setInterval(function(){
     $.get( "ajax-apprecord.php", { id: '.$id.', uid: '.$USER->id.' }, function(json){
         var j = JSON.parse(json);
         var t = +new Date();
-        
+
         //$(\'#recordappfile_debug\').html(t+": "+json);
 
         if (j.status == "success") {
@@ -640,7 +640,7 @@ setInterval(function(){
             $(\'#recordingslist\').show();
             $(\'#recordappfile_aac\').append(\'<source src="' . $CFG->wwwroot . '/mod/voiceshadow/file.php?file=\'+j.fileid+\'" type="audio/aac" /> <input type="hidden" name="speechtext" value="\'+j.text+\'" />\');
             $("#id_submitfile").val(j.itemid);
-            
+
             $.get( "ajax-apprecord.php", { a: "delete", id: '.$id.', uid: '.$USER->id.' });
         }
     } );
@@ -654,20 +654,20 @@ setInterval(function(){
   <img src="img/spiffygif_30x30.gif" style="display:none;" id="html5-mp3-loader"/>
   <button onclick="startRecording(this);" id="btn_rec" disabled>record</button>
   <button onclick="stopRecording(this);" id="btn_stop" disabled>stop</button>
-  
+
   <div style="font-size: 21px;line-height: 40px;color: #333;">Recordings</div>
   <ul id="recordingslist" style="list-style-type: none;"></ul>
-  
+
   <div style="font-size: 21px;line-height: 40px;color: #333;display:none;">Log</div>
   <pre id="log" style="display:none"></pre>
 
   <script>
-  
+
   $(".selectaudiomodel").click(function(){
     $("#audioshadowmp3").attr("src", $(this).parent().find("audio").attr("src"));
     __log($(this).parent().find("audio").attr("src"));
   });
-  
+
   function __log(e, data) {
     log.innerHTML += "\n" + e + " " + (data || \'\');
   }
@@ -679,10 +679,10 @@ setInterval(function(){
     var input = audio_context.createMediaStreamSource(stream);
     __log(\'Media stream created.\' );
     __log("input sample rate " +input.context.sampleRate);
-    
+
     //input.connect(audio_context.destination);
     //__log(\'Input connected to audio context destination.\');
-    
+
     recorder = new Recorder(input, {
                   numChannels: 1,
                   sampleRate: 48000,
@@ -702,10 +702,10 @@ setInterval(function(){
     button.disabled = true;
     button.previousElementSibling.disabled = false;
     __log(\'Stopped recording.\');
-    
+
     // create WAV download link using audio data blob
     createDownloadLink();
-    
+
     recorder.clear();
   }
 
@@ -723,14 +723,14 @@ setInterval(function(){
                        navigator.mozGetUserMedia ||
                        navigator.msGetUserMedia);
       window.URL = window.URL || window.webkitURL;
-      
+
       audio_context = new AudioContext;
       __log(\'Audio context set up.\');
       __log(\'navigator.getUserMedia \' + (navigator.getUserMedia ? \'available.\' : \'not present!\'));
     } catch (e) {
       alert(\'No web audio support in this browser!\');
     }
-    
+
     navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
       __log(\'No live audio input: \' + e);
     });
@@ -754,7 +754,7 @@ setInterval(function(){
       audio.trigger(\'load\');
       //startAudio()
   }
-  
+
   function startAudio(){
       __log(\'MP3 Audio Play\');
       audio.trigger(\'play\');
@@ -801,15 +801,15 @@ setInterval(function(){
   function toggleMuteAudio(){
       audio.prop("muted",!audio.prop("muted"));
   }
-  
+
   $( document ).ready(function() {
      jInit();
      loadAudio();
-     
+
      //$("#id_Recording").find(".fitemtitle").append(\'<img src="img/spiffygif_30x30.gif" style="display:none;" id="html5-mp3-loader"/>\');
   });
 </script>
-  
+
   <audio src="' . $linkhtml5mp3 . '" id="audioshadowmp3" autobuffer="autobuffer" data-url="' . urlencode(json_encode(array("id" => $id, "userid" => $USER->id))) . '"></audio>
                   ';
             } else {
@@ -847,9 +847,9 @@ function callbackjs(e){
     window.recordmark = 0;
     var stext = $("#speechtext").val();
     $("#speechtext").val("");
-  } else 
+  } else
     var stext = "";
-  
+
 
   $("#id_speechtext").val(""+stext+"");
   $(".choosingrecord").html(\'<img src="' . (new moodle_url("/mod/voiceshadow/img/right-arrow-gray.png")) . '" style="margin-top: 6px;"/>\');
@@ -863,7 +863,7 @@ function callbackjs(e){
   if($("#mp3_flash_records > div").size() >= ' . ($voiceshadow->allowmultiple + 1) . ') {
     $("#mp3_flash_records > div").last().remove();
   }
-  
+
 }
 ');
 
@@ -896,7 +896,7 @@ function callbackjs(e){
                       ';
                         } else {
                             $o = '<div style="margin:10px 0">
-                      <input type="radio" name="selectaudiomodel" value="' . $i . '" class="selectaudiomodel" id="id_selectaudiomodel_' . $i . '" style="float: left;margin: 0 20px 0 0;" ' . $checked . ' data-url="voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&fid=' . $audioVars[$i] . '&time=' . $time . '&var=' . $i . '&type=voiceshadow&mod=voiceshadow" />
+                      <input type="radio" name="selectaudiomodel" value="' . $i . '" class="selectaudiomodel" id="id_selectaudiomodel_' . $i . '" style="float: left;margin: 0 20px 0 0;" ' . $checked . ' data-url="voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&fid=' . $audioVars[$i] . '&time=' . $time . '&var=' . $i . '&audioBtn=1&type=voiceshadow&mod=voiceshadow" />
                       ';
                         }
 
@@ -983,6 +983,3 @@ function callbackjs(e){
 
 /// Finish the page
 echo $OUTPUT->footer();
-
-
-
