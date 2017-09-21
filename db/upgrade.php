@@ -138,7 +138,7 @@ function xmldb_voiceshadow_upgrade($oldversion=0) {
         //$dbman->add_field($table, $field);
 
         $table = new xmldb_table('voiceshadow');
-        $field = new xmldb_field('shadowingmode', XMLDB_TYPE_INTEGER, '2', null, null, null, '1', 'showspeedbox');
+        $field = new xmldb_field('shadowingmode', XMLDB_TYPE_INTEGER, '2', null, null, null, '1', null);
         // Launch change of type for field grade.
         $dbman->add_field($table, $field);
 

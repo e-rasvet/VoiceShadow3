@@ -65,10 +65,10 @@ $PAGE->requires->js('/mod/voiceshadow/js/jquery.min.js', true);
 
 $PAGE->requires->js('/mod/voiceshadow/js/flowplayer.min.js', true);
 $PAGE->requires->js('/mod/voiceshadow/js/swfobject.js', true);
-$PAGE->requires->js('/mod/voiceshadow/js/recordmp3.js', true);
+$PAGE->requires->js('/mod/voiceshadow/js/WebAudioRecorder.min.js?3', true);
 
 if ($a == "add")
-    $PAGE->requires->js('/mod/voiceshadow/js/main_vs_pl.js?6', true);
+    $PAGE->requires->js('/mod/voiceshadow/js/main_vs_pl.js?8', true);
 
 $PAGE->requires->css('/mod/voiceshadow/css/main.css?1');
 
@@ -300,7 +300,7 @@ if ($a == "list") {
             $o .= html_writer::tag('div', html_writer::tag('small', $editlink . $deletelink, array("style" => "margin: 2px 0 0 10px;")));
         }
 
-        $o .= html_writer::tag('div', get_string('speed', 'voiceshadow').': '.$list->speed, array('style' => 'margin:10px 0;'));
+        $o .= html_writer::tag('div', get_string('speed', 'voiceshadow') . ': ' . $list->speed, array('style' => 'margin:10px 0;'));
 
         $cell1 = new html_table_cell($o);
 
@@ -476,7 +476,7 @@ if ($a == "add") {
             //-----Speech to text plugin----------------//
 
             if ($voiceshadow->speechtotext == 1 && voiceshadow_get_browser() == 'chrome')
-                $mform->addElement('html', '<div id="foo"> <div class="p-header k" style="padding: 0px 0px 4px; margin: 0px;"> <table cellpadding="0" class="cf Ht"><tbody><tr id=":2jc"><td><div id=":2k1" class="Hp"><div class="aYF" style="width:152px">Use speech to text&lrm;</div></div></td><td class="Hm"><img class="Hl" id=":256" src="img/cleardot.gif"><img class="Hq" id=":257" src="img/cleardot.gif"></td></tr></tbody></table> </div><div class="p-content"> <div style="width: 100%;background-color: #fff;"> <div style="margin:0;width:280px;"> <div style="float:left;width: 120px;margin: 10px 20px 0 0;"><button type="button" style="width: 134px;" id="p-start-record">Start transcribing</button></div><div style="float:left;width: 120px;font-size: 60%;padding: 3px;" class="" id="p-rec-notice">Click "Start transcribing" button when you are ready.</div><div style="clear:both;"></div></div><textarea id="speechtext" style="width: 250px;height: 180px;margin: 0 0 0 8px;"></textarea> <div style="margin:10px 0 0 10px;width:260px;"> <div style="float:left;width: 120px;margin: 0 20px 0 0;"><button type="button" style="width: 120px;" id="p-speech-text">Speak it!</button></div><div style="float:left;width: 120px;"><button type="button" style="width: 120px;" id="p-clear-text">Clear text</button></div><div style="clear:both;"></div></div></div></div></div>');
+                $mform->addElement('html', '<div id="foo"> <div class="p-header k" style="padding: 0px 0px 4px; margin: 0px;"> <table cellpadding="0" class="cf Ht"><tbody><tr id=":2jc"><td><div id=":2k1" class="Hp"><div class="aYF" style="width:152px">Use speech to text&lrm;</div></div></td><td class="Hm"><img class="Hl" id=":256" src="img/cleardot.gif"><img class="Hq" id=":257" src="img/cleardot.gif"></td></tr></tbody></table> </div><div class="p-content"> <div style="width: 100%;background-color: #fff;"> <div style="margin:0;width:280px;"> <div style="float:left;width: 120px;margin: 10px 20px 0 0;"><!--<button type="button" style="width: 134px;" id="p-start-record">Start transcribing</button>--></div><div style="float:left;width: 120px;font-size: 60%;padding: 3px;" class="" id="p-rec-notice">Click "Start transcribing" button when you are ready.</div><div style="clear:both;"></div></div><textarea id="speechtext" style="width: 250px;height: 180px;margin: 0 0 0 8px;"></textarea> <div style="margin:10px 0 0 10px;width:260px;"> <div style="float:left;width: 120px;margin: 0 20px 0 0;"><!--<button type="button" style="width: 120px;" id="p-speech-text">Speak it!</button>--></div><div style="float:left;width: 120px;"><!--<button type="button" style="width: 120px;" id="p-clear-text">Clear text</button>--></div><div style="clear:both;"></div></div></div></div></div>');
 
             //--------------Checking Embed code---------//
             if (!empty($voiceshadow->embedvideo)) {
@@ -487,10 +487,10 @@ if ($a == "add") {
 
             //--------------Uploadd MP3 ----------------//
             //if (!voiceshadow_is_ios()) {
-                $filepickeroptions = array();
-                $filepickeroptions['maxbytes'] = get_max_upload_file_size($voiceshadow->maxbytes);
-                $mform->addElement('header', 'mp3upload', get_string('mp3upload', 'voiceshadow'));
-                $mform->addElement('filepicker', 'submitfile', get_string('uploadmp3', 'voiceshadow'), null, $filepickeroptions);
+            $filepickeroptions = array();
+            $filepickeroptions['maxbytes'] = get_max_upload_file_size($voiceshadow->maxbytes);
+            $mform->addElement('header', 'mp3upload', get_string('mp3upload', 'voiceshadow'));
+            $mform->addElement('filepicker', 'submitfile', get_string('uploadmp3', 'voiceshadow'), null, $filepickeroptions);
             //}
 
             //-------------- Listen to recorded audio ----------------//
@@ -529,7 +529,7 @@ if ($a == "add") {
 
                         if ($voiceshadow->showspeedbox == 2 || $voiceshadow->showspeedbox == 3) {
                             $o .= html_writer::start_tag('div', array('style' => 'float:left'));
-                            $o .= html_writer::empty_tag('input', array('type' => 'text', 'id' => 'listen-select-own-' . $i, 'value' => 90, 'style' => 'width:25px;margin-left:20px;'));
+                            $o .= html_writer::empty_tag('input', array('type' => 'text', 'id' => 'listen-select-own-' . $i, 'value' => 100, 'style' => 'width:25px;margin-left:20px;'));
                             $o .= html_writer::empty_tag('input', array('type' => 'button', 'data-url' => $i, 'class' => 'listen-select-own-set', 'value' => get_string('speedchange', 'voiceshadow')));
                             $o .= html_writer::end_tag('div');
                         }
@@ -623,13 +623,13 @@ if ($a == "add") {
 
                 //$mediadata .= '<div id="recordappfile_debug" controls></div>';
 
-                $mediadata .= html_writer::start_tag("ul", array("id"=>"recordingslist", "style" => "display:none; list-style-type: none;"));
+                $mediadata .= html_writer::start_tag("ul", array("id" => "recordingslist", "style" => "display:none; list-style-type: none;"));
                 $mediadata .= '<li><audio id="recordappfile_aac" controls></audio></li>';
                 $mediadata .= html_writer::end_tag('ul');
 
                 $mediadata .= html_writer::script('
 setInterval(function(){
-    $.get( "ajax-apprecord.php", { id: '.$id.', uid: '.$USER->id.' }, function(json){
+    $.get( "ajax-apprecord.php", { id: ' . $id . ', uid: ' . $USER->id . ' }, function(json){
         var j = JSON.parse(json);
         var t = +new Date();
 
@@ -641,7 +641,7 @@ setInterval(function(){
             $(\'#recordappfile_aac\').append(\'<source src="' . $CFG->wwwroot . '/mod/voiceshadow/file.php?file=\'+j.fileid+\'" type="audio/aac" /> <input type="hidden" name="speechtext" value="\'+j.text+\'" />\');
             $("#id_submitfile").val(j.itemid);
 
-            $.get( "ajax-apprecord.php", { a: "delete", id: '.$id.', uid: '.$USER->id.' });
+            $.get( "ajax-apprecord.php", { a: "delete", id: ' . $id . ', uid: ' . $USER->id . ' });
         }
     } );
 }, 1000);
@@ -691,50 +691,134 @@ setInterval(function(){
   }
 
   function startRecording(button) {
-    recorder && recorder.record();
+    recorder.startRecording();
     button.disabled = true;
     button.nextElementSibling.disabled = false;
     __log(\'Recording...\');
   }
 
   function stopRecording(button) {
-    recorder && recorder.stop();
+    recorder.finishRecording();
     button.disabled = true;
     button.previousElementSibling.disabled = false;
     __log(\'Stopped recording.\');
-
-    // create WAV download link using audio data blob
-    createDownloadLink();
-
-    recorder.clear();
-  }
-
-  function createDownloadLink() {
-    recorder && recorder.exportWAV(function(blob) {
-    });
   }
 
   window.onload = function init() {
-    try {
-      // webkit shim
-      window.AudioContext = window.AudioContext || window.webkitAudioContext;
-      navigator.getUserMedia = ( navigator.getUserMedia ||
-                       navigator.webkitGetUserMedia ||
-                       navigator.mozGetUserMedia ||
-                       navigator.msGetUserMedia);
-      window.URL = window.URL || window.webkitURL;
+    // navigator.getUserMedia shim
+    navigator.getUserMedia =
+      navigator.getUserMedia ||
+      navigator.webkitGetUserMedia ||
+      navigator.mozGetUserMedia ||
+      navigator.msGetUserMedia;
+    
+    // URL shim
+    window.URL = window.URL || window.webkitURL;
+    
+    // audio context + .createScriptProcessor shim
+    var audioContext = new AudioContext;
+    if (audioContext.createScriptProcessor == null)
+      audioContext.createScriptProcessor = audioContext.createJavaScriptNode;
+    
+    var testTone = (function() {
+      var osc = audioContext.createOscillator(),
+          lfo = audioContext.createOscillator(),
+          ampMod = audioContext.createGain(),
+          output = audioContext.createGain();
+      lfo.type = \'square\';
+      lfo.frequency.value = 2;
+      osc.connect(ampMod);
+      lfo.connect(ampMod.gain);
+      output.gain.value = 0.5;
+      ampMod.connect(output);
+      osc.start();
+      lfo.start();
+      return output;
+    })();
+    
+    
 
-      audio_context = new AudioContext;
-      __log(\'Audio context set up.\');
-      __log(\'navigator.getUserMedia \' + (navigator.getUserMedia ? \'available.\' : \'not present!\'));
-    } catch (e) {
-      alert(\'No web audio support in this browser!\');
-    }
+    
+    var testToneLevel = audioContext.createGain(),
+        microphone = undefined,     // obtained by user click
+        microphoneLevel = audioContext.createGain(),
+        mixer = audioContext.createGain();
+    
+    testTone.connect(testToneLevel);
+    testToneLevel.gain.value = 0;
+    testToneLevel.connect(mixer);
+    microphoneLevel.gain.value = 0.5;
+    microphoneLevel.connect(mixer);
+    //mixer.connect(audioContext.destination);
 
-    navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
-      __log(\'No live audio input: \' + e);
-    });
+      if (microphone == null)
+        navigator.getUserMedia({ audio: true },
+          function(stream) {
+            microphone = audioContext.createMediaStreamSource(stream);
+            microphone.connect(microphoneLevel);
+          },
+          function(error) {
+          console.log("Could not get audio input.");
+            audioRecorder.onError(audioRecorder, "Could not get audio input.");
+          });
+    
+    
+        recorder = new WebAudioRecorder(mixer, {
+          workerDir: "js/"
+        });
+        
+        recorder.setEncoding("mp3");
+        
+          recorder.setOptions({
+        timeLimit: 300,
+        mp3: { bitRate: 64 }
+      });
+    
+    recorder.onComplete = function(recorder, blob) {
+      window.LatestBlob = blob;
+      
+      var time = new Date(),
+      url = URL.createObjectURL(blob),
+      html = "<p recording=\'" + url + "\'>" +
+             "<audio controls src=\'" + url + "\'></audio> " +
+             "</p>";
+      
+      $("#recordingslist").html(html);
+                    
+      //saveRecording(blob, recorder.encoding);
+      uploadAudio(blob);
+      
+
+    };
+    
   };
+  
+  	
+	function uploadAudio(mp3Data){
+		var reader = new FileReader();
+		reader.onload = function(event){
+			var fd = new FormData();
+			var mp3Name = encodeURIComponent(\'audio_recording_\' + new Date().getTime() + \'.mp3\');
+			console.log("mp3name = " + mp3Name);
+			fd.append(\'name\', mp3Name);
+			fd.append(\'p\', $(\'#audioshadowmp3\').attr("data-url"));
+			fd.append(\'audio\', event.target.result);
+			$.ajax({
+				type: \'POST\',
+				url: \'uploadmp3.php\',
+				data: fd,
+				processData: false,
+				contentType: false
+			}).done(function(data) {
+				//console.log(data);
+				obj = JSON.parse(data);
+				$("#id_submitfile").val(obj.id);
+				
+				log.innerHTML += "\n" + data;
+			});
+		};      
+		reader.readAsDataURL(mp3Data);
+	}
 
   function jInit(){
       audio = $("#audioshadowmp3");
@@ -901,7 +985,7 @@ function callbackjs(e){
                         }
 
                         if (voiceshadow_is_ios() || voiceshadow_get_browser() == 'chrome' || voiceshadow_get_browser() == 'android') {
-                            $o .= '<div style="float:left;"><audio src="' . $link . '" id="audio_' . $voiceshadow->{$name} . '" controls="controls" class="startSST"><a href="' . $link . '">audio</a></audio></div><label for="id_selectaudiomodel_' . $i . '" style="float: left;margin-left: 20px;font-size: 15px;">' . $voiceshadow->{$nametext} . '</label><div style="clear:both;"></div>';
+                            $o .= '<div style="float:left;"><audio src="' . $link . '" id="audio_' . $voiceshadow->{$name} . '" controls="controls"><a href="' . $link . '">audio</a></audio></div><label for="id_selectaudiomodel_' . $i . '" style="float: left;margin-left: 20px;font-size: 15px;">' . $voiceshadow->{$nametext} . '</label><div style="clear:both;"></div>';
                         } else {
                             $o .= html_writer::script('var fn = function() {var att = { data:"' . (new moodle_url("/mod/voiceshadow/js/mp3player.swf")) . '", width:"90", height:"15" };var par = { flashvars:"src=' . $link . '" };var id = "audio_' . $voiceshadow->{$name} . '";var myObject = swfobject.createSWF(att, par, id);};swfobject.addDomLoadEvent(fn);');
                             $o .= '<div style="float:left;"><div id="audio_' . $voiceshadow->{$name} . '"><a href="' . $link . '">audio</a></div></div><label for="id_selectaudiomodel_' . $i . '" style="float: left;margin-left: 20px;font-size: 15px;">' . $voiceshadow->{$nametext} . '</label><div style="clear:both;"></div>';
