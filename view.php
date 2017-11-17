@@ -300,7 +300,7 @@ if ($a == "list") {
             $o .= html_writer::tag('div', html_writer::tag('small', $editlink . $deletelink, array("style" => "margin: 2px 0 0 10px;")));
         }
 
-        $o .= html_writer::tag('div', get_string('speed', 'voiceshadow') . ': ' . $list->speed, array('style' => 'margin:10px 0;'));
+        //$o .= html_writer::tag('div', get_string('speed', 'voiceshadow') . ': ' . $list->speed, array('style' => 'margin:10px 0;'));
 
         $cell1 = new html_table_cell($o);
 
