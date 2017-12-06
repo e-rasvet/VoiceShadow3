@@ -300,7 +300,7 @@ if ($a == "list") {
             $o .= html_writer::tag('div', html_writer::tag('small', $editlink . $deletelink, array("style" => "margin: 2px 0 0 10px;")));
         }
 
-        $o .= html_writer::tag('div', get_string('speed', 'voiceshadow') . ': ' . $list->speed, array('style' => 'margin:10px 0;'));
+        //$o .= html_writer::tag('div', get_string('speed', 'voiceshadow') . ': ' . $list->speed, array('style' => 'margin:10px 0;'));
 
         $cell1 = new html_table_cell($o);
 
@@ -475,8 +475,8 @@ if ($a == "add") {
 
             //-----Speech to text plugin----------------//
 
-            if ($voiceshadow->speechtotext == 1 && voiceshadow_get_browser() == 'chrome')
-                $mform->addElement('html', '<div id="foo"> <div class="p-header k" style="padding: 0px 0px 4px; margin: 0px;"> <table cellpadding="0" class="cf Ht"><tbody><tr id=":2jc"><td><div id=":2k1" class="Hp"><div class="aYF" style="width:152px">Use speech to text&lrm;</div></div></td><td class="Hm"><img class="Hl" id=":256" src="img/cleardot.gif"><img class="Hq" id=":257" src="img/cleardot.gif"></td></tr></tbody></table> </div><div class="p-content"> <div style="width: 100%;background-color: #fff;"> <div style="margin:0;width:280px;"> <div style="float:left;width: 120px;margin: 10px 20px 0 0;"><!--<button type="button" style="width: 134px;" id="p-start-record">Start transcribing</button>--></div><div style="float:left;width: 120px;font-size: 60%;padding: 3px;" class="" id="p-rec-notice">Click "Start transcribing" button when you are ready.</div><div style="clear:both;"></div></div><textarea id="speechtext" style="width: 250px;height: 180px;margin: 0 0 0 8px;"></textarea> <div style="margin:10px 0 0 10px;width:260px;"> <div style="float:left;width: 120px;margin: 0 20px 0 0;"><!--<button type="button" style="width: 120px;" id="p-speech-text">Speak it!</button>--></div><div style="float:left;width: 120px;"><!--<button type="button" style="width: 120px;" id="p-clear-text">Clear text</button>--></div><div style="clear:both;"></div></div></div></div></div>');
+            //if ($voiceshadow->speechtotext == 1 && voiceshadow_get_browser() == 'chrome')
+                //$mform->addElement('html', '<div id="foo"> <div class="p-header k" style="padding: 0px 0px 4px; margin: 0px;"> <table cellpadding="0" class="cf Ht"><tbody><tr id=":2jc"><td><div id=":2k1" class="Hp"><div class="aYF" style="width:152px">Use speech to text&lrm;</div></div></td><td class="Hm"><img class="Hl" id=":256" src="img/cleardot.gif"><img class="Hq" id=":257" src="img/cleardot.gif"></td></tr></tbody></table> </div><div class="p-content"> <div style="width: 100%;background-color: #fff;"> <div style="margin:0;width:280px;"> <div style="float:left;width: 120px;margin: 10px 20px 0 0;"><!--<button type="button" style="width: 134px;" id="p-start-record">Start transcribing</button>--></div><div style="float:left;width: 120px;font-size: 60%;padding: 3px;" class="" id="p-rec-notice">Click "Start transcribing" button when you are ready.</div><div style="clear:both;"></div></div><textarea id="speechtext" style="width: 250px;height: 180px;margin: 0 0 0 8px;"></textarea> <div style="margin:10px 0 0 10px;width:260px;"> <div style="float:left;width: 120px;margin: 0 20px 0 0;"><!--<button type="button" style="width: 120px;" id="p-speech-text">Speak it!</button>--></div><div style="float:left;width: 120px;"><!--<button type="button" style="width: 120px;" id="p-clear-text">Clear text</button>--></div><div style="clear:both;"></div></div></div></div></div>');
 
             //--------------Checking Embed code---------//
             if (!empty($voiceshadow->embedvideo)) {
@@ -519,17 +519,21 @@ if ($a == "add") {
                         //if (voiceshadow_is_ios() || voiceshadow_get_browser() == 'chrome' || voiceshadow_get_browser() == 'android') {
                         $o .= '<div style="float:left;"><audio src="' . $link . '" controls="controls" id="listen-player-' . $i . '"><a href="' . $link . '">audio</a></audio></div>';
 
-                        if ($voiceshadow->showspeedbox == 1 || $voiceshadow->showspeedbox == 3) {
-                            $levels = array("1" => get_string('speedchange', 'voiceshadow'), "0.7" => "70%", "0.8" => "80%", "0.9" => "90%", "1" => get_string('normal', 'voiceshadow'));
+                        $style_listen_select = "";
 
-                            $o .= html_writer::start_tag('div', array('style' => 'float:left'));
-                            $o .= html_writer::select($levels, '', '', true, array("id" => "listen-select-{$i}"));
-                            $o .= html_writer::end_tag('div');
+                        if ($voiceshadow->showspeedbox == 1 || $voiceshadow->showspeedbox == 3) { } else {
+                            $style_listen_select = "display:none";
                         }
+
+                        $levels = array("1" => get_string('speedchange', 'voiceshadow'), "0.7" => "70%", "0.8" => "80%", "0.9" => "90%", "1" => get_string('normal', 'voiceshadow'));
+
+                        $o .= html_writer::start_tag('div', array('style' => 'float:left'));
+                        $o .= html_writer::select($levels, '', '', true, array("id" => "listen-select-{$i}", "style" => $style_listen_select));
+                        $o .= html_writer::end_tag('div');
 
                         if ($voiceshadow->showspeedbox == 2 || $voiceshadow->showspeedbox == 3) {
                             $o .= html_writer::start_tag('div', array('style' => 'float:left'));
-                            $o .= html_writer::empty_tag('input', array('type' => 'text', 'id' => 'listen-select-own-' . $i, 'value' => 100, 'style' => 'width:25px;margin-left:20px;'));
+                            $o .= html_writer::empty_tag('input', array('type' => 'text', 'id' => 'listen-select-own-' . $i, 'value' => 100, 'style' => 'width:45px;margin-left:20px;'));
                             $o .= html_writer::empty_tag('input', array('type' => 'button', 'data-url' => $i, 'class' => 'listen-select-own-set', 'value' => get_string('speedchange', 'voiceshadow')));
                             $o .= html_writer::end_tag('div');
                         }
@@ -546,10 +550,12 @@ if ($a == "add") {
         function changeSpeed' . $i . '(event){
             audioListener' . $i . '.playbackRate = event.target.value;
             speed' . $i . ' = event.target.value;
+            //console.log (event.target.value);
             $(\'input[name=speed]\').val(Math.round(speed' . $i . '*100));
         }
         function changeSpeedF' . $i . '(v){
             audioListener' . $i . '.playbackRate = v;
+            //console.log (v);
             speed' . $i . ' = v;
             $(\'input[name=speed]\').val(Math.round(speed' . $i . '*100));
         }
@@ -605,7 +611,7 @@ if ($a == "add") {
                 $mediadata .= html_writer::start_tag("h3", array("style" => "padding: 0 20px;"));
 
                 if ($voiceshadow->shadowingmode == 2) {
-                    $mediadata .= html_writer::start_tag("a", array("href" => 'voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&time=' . $time . '&fid=' . $audioVars[1] . '&var=1&audioBtn=0&mod=voiceshadow', "id" => "id_recoring_link",
+                    $mediadata .= html_writer::start_tag("a", array("href" => 'voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&time=' . $time . '&fid=0&var=1&audioBtn=0&mod=voiceshadow', "id" => "id_recoring_link",
                         "onclick" => 'formsubmit(this.href)'));
                 } else {
                     $mediadata .= html_writer::start_tag("a", array("href" => 'voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&time=' . $time . '&fid=' . $audioVars[1] . '&var=1&audioBtn=1&type=voiceshadow&mod=voiceshadow', "id" => "id_recoring_link",
@@ -647,6 +653,12 @@ setInterval(function(){
 }, 1000);
                 ');
             } else if ($recorderType == "html5") {
+
+                $additionalCodeSpeechToTextBox = "";
+
+                if ($voiceshadow->speechtotext == 1 && voiceshadow_get_browser() == 'chrome')
+                    $additionalCodeSpeechToTextBox = '<textarea id="speechtext" style="width: 650px;height: 40px;margin: 0 0 0 8px;" readonly></textarea>';
+
                 $mediadata .= '
 
   <div style="font-size: 21px;line-height: 40px;color: #333;">Record</div>
@@ -654,6 +666,8 @@ setInterval(function(){
   <img src="img/spiffygif_30x30.gif" style="display:none;" id="html5-mp3-loader"/>
   <button onclick="startRecording(this);" id="btn_rec" disabled>record</button>
   <button onclick="stopRecording(this);" id="btn_stop" disabled>stop</button>
+
+  <div style="margin: 20px 0;">'.$additionalCodeSpeechToTextBox.'</div>
 
   <div style="font-size: 21px;line-height: 40px;color: #333;">Recordings</div>
   <ul id="recordingslist" style="list-style-type: none;"></ul>
@@ -746,7 +760,7 @@ setInterval(function(){
     
     testTone.connect(testToneLevel);
     testToneLevel.gain.value = 0;
-    testToneLevel.connect(mixer);
+    //testToneLevel.connect(mixer);
     microphoneLevel.gain.value = 0.5;
     microphoneLevel.connect(mixer);
     //mixer.connect(audioContext.destination);
@@ -892,9 +906,13 @@ setInterval(function(){
 
      //$("#id_Recording").find(".fitemtitle").append(\'<img src="img/spiffygif_30x30.gif" style="display:none;" id="html5-mp3-loader"/>\');
   });
-</script>
+</script>';
 
-  <audio src="' . $linkhtml5mp3 . '" id="audioshadowmp3" autobuffer="autobuffer" data-url="' . urlencode(json_encode(array("id" => $id, "userid" => $USER->id))) . '"></audio>
+                if (isset($linkhtml5mp3))
+                    $mediadata .= ' <audio src="' . $linkhtml5mp3 . '" id="audioshadowmp3" autobuffer="autobuffer" data-url="' . urlencode(json_encode(array("id" => $id, "userid" => $USER->id))) . '"></audio>
+                  ';
+                else
+                    $mediadata .= ' <audio src="" id="audioshadowmp3" autobuffer="autobuffer" data-url="' . urlencode(json_encode(array("id" => $id, "userid" => $USER->id))) . '"></audio>
                   ';
             } else {
                 $filename = str_replace(" ", "_", $USER->username) . "_" . date("Ymd_Hi", $time);

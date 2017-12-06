@@ -42,7 +42,7 @@ $.fn.setCursorPosition = function(pos) {
             range.moveStart('character', pos);
             range.select();
         }
-}
+};
 
 
 try {
@@ -118,13 +118,13 @@ $( document ).ready(function() {
         setTimeout('$("#speechtext").val(function(i, text) {return text + " "});', 1300);
       }
     });
-    
+
     $('#btn_rec').click(function() {
         $('.p-content').show();
         recognition.start();
         window.recordmark = 1;
     });
-    
+
     $('#btn_stop').click(function() {
         recognition.stop();
         window.recordmark = 0;
