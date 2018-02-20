@@ -141,7 +141,7 @@ if ($a == 'add' && $act == 'newinstance') {
 
 
 if ($a == 'add' && $act == 'addcomment' && isset($summary)) {
-    $data = new object;
+    $data = new stdClass();
     $data->instance = $id;
     $data->userid = $USER->id;
     $data->summary = $summary;
@@ -156,7 +156,7 @@ if ($a == 'add' && $act == 'addcomment' && isset($summary)) {
             if (mimeinfo('type', $file->filename) == 'audio/wav') {
                 $data->itemoldid = $file->id;
 
-                $add = new stdClass;
+                $add = new stdClass();
                 $add->itemid = $file->id;
                 $add->type = mimeinfo('type', $file->filename);
                 $add->status = 'open';

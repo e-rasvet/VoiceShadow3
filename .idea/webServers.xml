@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="2be350dc-b290-4f85-954b-047ac5d6f0b6" name="biz214.inmotionhosting.com" url="http://biz214.inmotionhosting.com">
+        <fileTransfer host="biz214.inmotionhosting.com" port="2222" privateKey="$USER_HOME$/.ssh/id_rsaNobuhiro" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="2222" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

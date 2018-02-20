@@ -50,7 +50,7 @@ if (!empty($data) && !empty($value)) {
       
       if (has_capability('mod/voiceshadow:teacher', $context)) {
           $catdata  = $DB->get_record("grade_items", array("courseid" => $cm->course, "iteminstance"=> $voiceshadow->id, "itemmodule" => 'voiceshadow'));
-          $gradesdata               = new object;
+          $gradesdata               = new stdClass();
           $gradesdata->itemid       = $catdata->id;
           $gradesdata->userid       = $voiceshadowfiles->userid;
           $gradesdata->rawgrade     = $value;

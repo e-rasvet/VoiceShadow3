@@ -59,10 +59,10 @@ var interimResult = '';
 recognition.onresult = function (event) {
     //console.log(event);
 
-    var pos = $('#speechtext').get(0) - interimResult.length;
+    var pos = $('#speechtext').getCursorPosition() - interimResult.length;
     $('#speechtext').val($('#speechtext').val().replace(interimResult, ''));
     interimResult = '';
-    $('#speechtext').get(0).setSelectionRange;
+    $('#speechtext').setCursorPosition(pos);
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
           insertAtCaret('speechtext', event.results[i][0].transcript);
