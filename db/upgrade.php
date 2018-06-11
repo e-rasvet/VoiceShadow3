@@ -146,6 +146,50 @@ function xmldb_voiceshadow_upgrade($oldversion=0) {
         upgrade_mod_savepoint(true, 2017073000, 'voiceshadow');
     }
 
+
+    /*
+    if ($oldversion < 2018033000) {
+        $table = new xmldb_table('voiceshadow');
+
+        $field = new xmldb_field('showscore', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $dbman->add_field($table, $field);
+        $field = new xmldb_field('speechtotext', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '0');
+        $dbman->add_field($table, $field);
+        $field = new xmldb_field('showspeedbox', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '0');
+        $dbman->add_field($table, $field);
+        $field = new xmldb_field('shadowingmode', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '0');
+        $dbman->add_field($table, $field);
+
+        $field = new xmldb_field('var1transcript', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+        $dbman->add_field($table, $field);
+        $field = new xmldb_field('var2transcript', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+        $dbman->add_field($table, $field);
+        $field = new xmldb_field('var3transcript', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+        $dbman->add_field($table, $field);
+        $field = new xmldb_field('var4transcript', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+        $dbman->add_field($table, $field);
+        $field = new xmldb_field('var5transcript', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+        $dbman->add_field($table, $field);
+
+        // Assign savepoint reached.
+        upgrade_mod_savepoint(true, 2018033000, 'voiceshadow');
+    }
+    */
+/*
+    if ($oldversion < 2018043000) {
+        $table = new xmldb_table('voiceshadow_files');
+
+        $field = new xmldb_field('speechtext', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+        $dbman->add_field($table, $field);
+
+        $field = new xmldb_field('speed', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $dbman->add_field($table, $field);
+
+        upgrade_mod_savepoint(true, 2018043000, 'voiceshadow');
+    }
+*/
+
+
     return $result;
 }
 
