@@ -28,7 +28,7 @@ $filename = "record_aac_" . date("Ymd") . "_" . rand(999, 99999);
 
 $student = $DB->get_record("user", array("id" => $uid));
 
-if (!empty($id))
+if (!empty($id) && $var != 0)
     $context = context_module::instance($id);
 else
     $context = context_user::instance($uid);
@@ -44,6 +44,11 @@ if (!empty($id)) {
 } else {
     $file_record->component = 'user';
     $file_record->filearea = 'public';
+}
+
+if ($var == 0) {
+    $file_record->component = 'user';
+    $file_record->filearea = 'draft';
 }
 
 

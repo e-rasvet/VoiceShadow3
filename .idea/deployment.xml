@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="biz214.inmotionhosting.com">
+  <component name="PublishConfigData" autoUpload="Always" serverName="kochi-tech.website">
     <serverData>
       <paths name="biz214.inmotionhosting.com">
         <serverdata>
           <mappings>
             <mapping deploy="/home/fltrcn5/public_html/moodle/mod/voiceshadow" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="kochi-tech.website">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/public_html/moodle/mod/voiceshadow" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

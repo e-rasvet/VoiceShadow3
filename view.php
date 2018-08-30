@@ -614,7 +614,7 @@ if ($a == "add") {
                     $mediadata .= html_writer::start_tag("a", array("href" => 'voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&time=' . $time . '&fid=0&var=1&audioBtn=0&mod=voiceshadow', "id" => "id_recoring_link",
                         "onclick" => 'formsubmit(this.href)'));
                 } else {
-                    $mediadata .= html_writer::start_tag("a", array("href" => 'voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&time=' . $time . '&fid=' . $audioVars[1] . '&var=1&audioBtn=1&type=voiceshadow&mod=voiceshadow', "id" => "id_recoring_link",
+                    $mediadata .= html_writer::start_tag("a", array("href" => 'voiceshadow://?link=' . $CFG->wwwroot . '&id=' . $id . '&uid=' . $USER->id . '&time=' . $time . '&fid=' . $audioVars[1] . '&var=1&audioBtn=1&sstBtn=1&type=voiceshadow&mod=voiceshadow', "id" => "id_recoring_link",  //
                         "onclick" => 'formsubmit(this.href)'));
                 }
 

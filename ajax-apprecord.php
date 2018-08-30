@@ -12,9 +12,16 @@
 
   $a                       = optional_param('a', NULL, PARAM_TEXT);
   $id                      = optional_param('id', 0, PARAM_INT);
+  $inst                    = optional_param('inst', 0, PARAM_INT);
   $uid                     = optional_param('uid', 0, PARAM_INT);
 
-  if ($data = $DB->get_records("voiceshadow_appfiles", array("instance"=>$id, "userid"=>$uid), "id DESC")){
+  if ($inst > 0) {
+      $data = $DB->get_records("voiceshadow_appfiles", array("instance"=>$inst, "sourcefileid"=>$id, "userid"=>$uid), "id DESC");
+  } else {
+      $data = $DB->get_records("voiceshadow_appfiles", array("instance"=>$id, "userid"=>$uid), "id DESC");
+  }
+
+  if ($data){
       $data = current($data);
       //$DB->delete_records("voiceshadow_appfiles", array("id"=>$data->id));
 

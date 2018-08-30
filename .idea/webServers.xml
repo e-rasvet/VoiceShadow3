@@ -10,6 +10,14 @@
           <option name="port" value="2222" />
         </fileTransfer>
       </webServer>
+      <webServer id="a6508ed6-5634-44b3-a43b-8a27496e2c09" name="kochi-tech.website" url="http://kochi-tech.website">
+        <fileTransfer host="kochi-tech.website" port="22" rootFolder="/home/c/co52592/" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>
